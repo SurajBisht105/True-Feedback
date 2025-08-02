@@ -1,8 +1,8 @@
-import { resend } from "@/lib/resend";
-import { webhookConfig } from "@/types/zapier";
-import VerificationEmail from "../../emails/VerificationEmail";
+// import { resend } from "@/lib/resend";
+import { webhookConfig } from "../types/zapier";
+// import VerificationEmail from "../../emails/VerificationEmail";
 import { ApiResponse } from "@/types/ApiResponse";
-import { getVerificationEmailHTML } from "@/templates/verificationEmailTemplate";
+import { getVerificationEmailHTML } from "../templates/verificationEmailTemplate";
 
 export async function sendVerificationEmail(
   email: string,
