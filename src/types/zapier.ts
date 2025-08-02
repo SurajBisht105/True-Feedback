@@ -17,3 +17,4 @@ export const webhookConfig: WebhookConfig = {
     'Content-Type': 'application/json',
   },
 };
+
