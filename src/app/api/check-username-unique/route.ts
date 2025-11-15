@@ -1,11 +1,14 @@
-import dbConnect from '@/lib/dbConnect';
-import UserModel from '@/model/User';
-import { z } from 'zod';
-import { usernameValidation } from '@/schemas/signUpSchema';
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import UserModel from "@/model/User";
+import { z } from "zod";
+import { usernameValidation } from "@/schemas/signUpSchema";
 
 const UsernameQuerySchema = z.object({
   username: usernameValidation,
 });
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   await dbConnect();
@@ -13,20 +16,20 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const queryParams = {
-      username: searchParams.get('username'),
+      username: searchParams.get("username"),
     };
 
     const result = UsernameQuerySchema.safeParse(queryParams);
 
     if (!result.success) {
       const usernameErrors = result.error.format().username?._errors || [];
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message:
             usernameErrors?.length > 0
-              ? usernameErrors.join(', ')
-              : 'Invalid query parameters',
+              ? usernameErrors.join(", ")
+              : "Invalid query parameters",
         },
         { status: 400 }
       );
@@ -40,28 +43,28 @@ export async function GET(request: Request) {
     });
 
     if (existingVerifiedUser) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
-          message: 'Username is already taken',
+          message: "Username is already taken",
         },
         { status: 200 }
       );
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: true,
-        message: 'Username is unique',
+        message: "Username is unique",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Error checking username:', error);
-    return Response.json(
+    console.error("Error checking username:", error);
+    return NextResponse.json(
       {
         success: false,
-        message: 'Error checking username',
+        message: "Error checking username",
       },
       { status: 500 }
     );
