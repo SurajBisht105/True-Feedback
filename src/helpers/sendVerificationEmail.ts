@@ -10,19 +10,14 @@ export async function sendVerificationEmail(
   try {
     const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
-    const { data, error } = await resend.emails.send({
-      from: "onboarding@resend.dev", // Use your verified domain in production
+    const response = await resend.emails.send({
+      from: "onboarding@resend.dev",
       to: email,
       subject: "Anonymous Feedback Verification Code",
       react: VerificationEmail({ BASE_URL, username, otp: verifyCode }),
     });
 
-    if (error) {
-      console.error("Resend API error:", error);
-      return { success: false, message: error.message || "Failed to send verification email" };
-    }
-
-    console.log("Email sent successfully via Resend! ID:", data?.id);
+    console.log("Email sent successfully via Resend!", response);
     return { success: true, message: "Verification email sent successfully" };
 
   } catch (emailError) {
