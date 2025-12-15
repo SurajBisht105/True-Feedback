@@ -1,5 +1,5 @@
 import { resend } from "@/lib/resend";
-import VerificationEmail from "../../emails/VerificationEmail";
+import VerificationEmail from "@/../emails/VerificationEmail";
 import { ApiResponse } from "@/types/ApiResponse";
 
 export async function sendVerificationEmail(
@@ -8,25 +8,23 @@ export async function sendVerificationEmail(
   verifyCode: string
 ): Promise<ApiResponse> {
   try {
-    const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-
     const response = await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "Mystery Message <noreply@surajbisht.me>",
       to: email,
-      subject: "Anonymous Feedback Verification Code",
-      react: VerificationEmail({ BASE_URL, username, otp: verifyCode }),
+      subject: "🔐 Mystery Message - Verification Code",
+      react: VerificationEmail({ username, verifyCode }), // React component!
     });
 
-    console.log("Email sent successfully via Resend!", response);
-    return { success: true, message: "Verification email sent successfully" };
-
-  } catch (emailError) {
-    console.error("Error sending verification email:", emailError);
-    
-    if (emailError instanceof Error) {
-      return { success: false, message: emailError.message };
+    // Type-safe runtime check: ensure response contains an id (success case)
+    if (!("id" in response) || !response.id) {
+      console.error("❌ Resend error: invalid response", response);
+      return { success: false, message: "Failed to send verification email." };
     }
-    
-    return { success: false, message: "Failed to send verification email" };
+
+    console.log("✅ Email sent:", response.id);
+    return { success: true, message: "Verification email sent successfully." };
+  } catch (emailError: any) {
+    console.error("❌ Error sending email:", emailError.message);
+    return { success: false, message: "Failed to send verification email." };
   }
 }
