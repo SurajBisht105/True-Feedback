@@ -1,64 +1,61 @@
 import {
   Html,
   Head,
-  Font,
-  Preview,
-  Heading,
-  Row,
+  Body,
+  Container,
   Section,
   Text,
-  Button,
-} from '@react-email/components';
+  Heading,
+} from "@react-email/components";
 
 interface VerificationEmailProps {
   username: string;
-  otp: string;
+  verifyCode: string;
 }
 
-export default function VerificationEmail({ username, otp }: VerificationEmailProps) {
+export default function VerificationEmail({
+  username,
+  verifyCode,
+}: VerificationEmailProps) {
   return (
-    <Html lang="en" dir="ltr">
-      <Head>
-        <title>Verification Code</title>
-        <Font
-          fontFamily="Roboto"
-          fallbackFontFamily="Verdana"
-          webFont={{
-            url: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
-            format: 'woff2',
-          }}
-          fontWeight={400}
-          fontStyle="normal"
-        />
-      </Head>
-      <Preview>Here&apos;s your verification code: {otp}</Preview>
-      <Section>
-        <Row>
-          <Heading as="h2">Hello {username},</Heading>
-        </Row>
-        <Row>
-          <Text>
-            Thank you for registering. Please use the following verification
-            code to complete your registration:
-          </Text>
-        </Row>
-        <Row>
-          <Text>{otp}</Text> 
-        </Row>
-        <Row>
-          <Text>
-            If you did not request this code, please ignore this email.
-          </Text>
-        </Row>
-        {/* <Row>
-          <Button
-            href={`http://localhost:3000/verify/${username}`}
-            style={{ color: '#61dafb' }}
+    <Html>
+      <Head />
+      <Body style={{ backgroundColor: "#f6f9fc", fontFamily: "sans-serif" }}>
+        <Container style={{ padding: "40px", maxWidth: "600px" }}>
+          <Section
+            style={{
+              backgroundColor: "#ffffff",
+              padding: "30px",
+              borderRadius: "8px",
+            }}
           >
-            Verify here
-          </Button>
-        </Row> */}
-      </Section>
+            <Heading style={{ color: "#333" }}>🔐 Verify Your Email</Heading>
+            <Text style={{ fontSize: "16px", color: "#555" }}>
+              Hello {username}!
+            </Text>
+            <Text style={{ fontSize: "16px", color: "#555" }}>
+              Your verification code is:
+            </Text>
+            <Text
+              style={{
+                fontSize: "32px",
+                fontWeight: "bold",
+                color: "#007bff",
+                letterSpacing: "4px",
+                textAlign: "center",
+                padding: "20px",
+                backgroundColor: "#f0f7ff",
+                borderRadius: "8px",
+              }}
+            >
+              {verifyCode}
+            </Text>
+            <Text style={{ fontSize: "14px", color: "#888" }}>
+              This code expires in 10 minutes.
+            </Text>
+          </Section>
+        </Container>
+      </Body>
     </Html>
   );
 }
